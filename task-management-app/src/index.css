@@ -45,3 +45,11 @@
 .AddTaskButton {
   width: 100%;
 }
+
+.task-card {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1.5px solid #565656;
+  border-radius: 5px;
+  background-color: white;
+}
