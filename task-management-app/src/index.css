@@ -1,0 +1,47 @@
+.Header {
+  text-align: center;
+  background-color: #e8e8e8;
+  font-size: 30px;
+  padding: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.TaskColumn .Col{
+  font-size: 20px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.to-do {
+  background-color: #c2d5f3;
+}
+
+.in-progress {
+  background-color: #e5e3a5;
+}
+
+.done {
+  background-color: #a5e3a5;
+}
+
+.pending {
+  background-color: #f3c2c2;
+}
+
+.AddTaskBar {
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+.AddTaskField {
+  padding: 10px;
+  width: 100%;
+  border: 1.5px solid #000000;
+  border-radius: 5px;
+  font-size: 20px;
+}
+
+.AddTaskButton {
+  width: 100%;
+}
