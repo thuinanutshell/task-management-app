@@ -48,7 +48,9 @@ export default function TaskColumn() {
                     <Col className="Col to-do" onDragOver={allowDrop} onDrop={(event) => onDrop(event, setToDoTasks, toDoTasks)}>
                         <h3>To Do</h3>
                         {toDoTasks.map((task, index) => (
-                            <div className='task-card' key={index} draggable="true" onDragStart={(event) => onDragStart(event, task, 'to-do')}>{task}</div>
+                            <div className='task-card' key={index} draggable="true" onDragStart={(event) => onDragStart(event, task, 'to-do')}>
+                                <input type="checkbox" /> {task}
+                            </div>
                         ))}
                     </Col>
                     <Col className="Col in-progress" onDragOver={allowDrop} onDrop={(event) => onDrop(event, setInProgressTasks, inProgressTasks)}>

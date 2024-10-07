@@ -47,9 +47,21 @@
 }
 
 .task-card {
+  display: flex;
+  align-items: center;
   padding: 10px;
   margin-bottom: 10px;
   border: 1.5px solid #565656;
   border-radius: 5px;
   background-color: white;
+}
+
+.task-card input[type="checkbox"] {
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.task-card.completed {
+  text-decoration: line-through;
 }
