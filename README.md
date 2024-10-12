@@ -1,6 +1,7 @@
 # Hierarchical Task Management App
 ## Overall Goal
-![First Iteration](https://github.com/user-attachments/assets/60ec9831-4e71-4137-9812-383e8c255d06)
+<img width="647" alt="Screenshot 2024-10-11 at 10 18 33 PM" src="https://github.com/user-attachments/assets/15d0ad39-5a5e-4742-a54f-28a41a7241f6">
+
 
 The application should allow users to create multiple lists, and each list should be able to contain multiple items. Each item should be able to contain multiple sub-items, and so on. The user should be able to create, edit, and delete lists and items. The user should also be able to move items between lists.
 
