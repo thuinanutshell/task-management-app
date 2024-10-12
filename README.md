@@ -21,3 +21,6 @@ The true value of a hierarchical todo list is that it allows users to hide the s
 - Allow the todo items to be infinitely nested and ensure that they render nicely to the screen. (Nice here is relative - pretty much any representation that is 10 layers deep will look awful. Just make sure that all the text is visible, and the columns are of a reasonable width)
 - Allow each user to move tasks/subtasks around arbitrarily.
 - Test your code! Unit tests are the best.
+
+## Useful Resources
+1. https://react.dev/learn/thinking-in-react
