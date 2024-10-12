@@ -7,9 +7,9 @@
     - `Header`
     - `BoardView`
       - `TaskColumn`
-      - `ListHeader`
-      - `TaskCard`
-      - `AddNewTaskButton`
+        - `ListHeader`
+        - `TaskCard`
+        - `AddNewTaskButton`
 ## Step 2: Build a static version in React
 
 ## Step 3: Find the minimal but complete representation of UI state
