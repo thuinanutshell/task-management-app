@@ -1,13 +1,15 @@
 # Hierarchical Task Management App
-## Overall Goal
+## Step 1: Break the UI into a component hierarchy
 <img width="647" alt="Screenshot 2024-10-11 at 10 18 33 PM" src="https://github.com/user-attachments/assets/15d0ad39-5a5e-4742-a54f-28a41a7241f6">
 
+## Step 2: Build a static version in React
 
-The application should allow users to create multiple lists, and each list should be able to contain multiple items. Each item should be able to contain multiple sub-items, and so on. The user should be able to create, edit, and delete lists and items. The user should also be able to move items between lists.
+## Step 3: Find the minimal but complete representation of UI state
 
-Your visual design can be very straightforward. In practice, a true recursive solution is difficult to style in a way that is both visually appealing and easy to use. For this reason, you are allowed to limit the depth of the hierarchy to 3 levels. (This means that each list can contain items, and each item can contain sub-items, and each sub-item can contain sub-sub-items, but no further.)
+## Step 4: Identify where your state should live
 
-The true value of a hierarchical todo list is that it allows users to hide the sub-items of a given item. This allows users to focus on the most important tasks, and to hide the details until they are ready to deal with them. For this reason, your application should allow users to hide and show the sub-items of any item.
+## Step 5: Add inverse data flow 
+
 ## Requirements
 - The app should have multiple users. Each user should only see their own tasks.
 - Users should not be able to modify any other user's tasks.
