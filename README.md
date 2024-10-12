@@ -1,7 +1,15 @@
 # Hierarchical Task Management App
 ## Step 1: Break the UI into a component hierarchy
-<img width="647" alt="Screenshot 2024-10-11 at 10 18 33 PM" src="https://github.com/user-attachments/assets/15d0ad39-5a5e-4742-a54f-28a41a7241f6">
 
+![User Flow - Kanban Board (2)](https://github.com/user-attachments/assets/61b3e897-4819-42a6-a6e0-322be9eda1c5)
+
+- `TaskManagementApp`
+    - `Header`
+    - `BoardView`
+      - `TaskColumn`
+      - `ListHeader`
+      - `TaskCard`
+      - `AddNewTaskButton`
 ## Step 2: Build a static version in React
 
 ## Step 3: Find the minimal but complete representation of UI state
