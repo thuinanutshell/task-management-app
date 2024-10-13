@@ -13,8 +13,11 @@
         - `ListHeader`
           - `ListHeaderInput`
         - `TaskList`
-          - `TaskCard`
-          - `TaskNameInput`
+          - `TaskNode` (recursive component)
+            - `TaskCard`
+                - `TaskNameInput`
+                - `AddSubtaskButton`
+            - `SubtaskList` (contains the child TaskNode)
         - `AddNewTaskButton`
 ## Step 2: Build a static version in React
 
