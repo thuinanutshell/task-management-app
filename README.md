@@ -1,12 +1,32 @@
 # Hierarchical Task Management App
-## Overall Goal
-![First Iteration](https://github.com/user-attachments/assets/60ec9831-4e71-4137-9812-383e8c255d06)
+## Step 1: Break the UI into a component hierarchy
 
-The application should allow users to create multiple lists, and each list should be able to contain multiple items. Each item should be able to contain multiple sub-items, and so on. The user should be able to create, edit, and delete lists and items. The user should also be able to move items between lists.
+![User Flow - Kanban Board (4)](https://github.com/user-attachments/assets/a9491a31-abc1-4ef7-9fe7-a8d3385b2c6a)
 
-Your visual design can be very straightforward. In practice, a true recursive solution is difficult to style in a way that is both visually appealing and easy to use. For this reason, you are allowed to limit the depth of the hierarchy to 3 levels. (This means that each list can contain items, and each item can contain sub-items, and each sub-item can contain sub-sub-items, but no further.)
 
-The true value of a hierarchical todo list is that it allows users to hide the sub-items of a given item. This allows users to focus on the most important tasks, and to hide the details until they are ready to deal with them. For this reason, your application should allow users to hide and show the sub-items of any item.
+
+- `TaskManagementApp`
+    - `Header`
+      - `CreateListButton`
+    - `BoardView`
+      - `TaskColumn`
+        - `ListHeader`
+          - `ListHeaderInput`
+        - `TaskList`
+          - `TaskNode` (recursive component)
+            - `TaskCard`
+                - `TaskNameInput`
+                - `AddSubtaskButton`
+            - `SubtaskList` (contains the child TaskNode)
+        - `AddNewTaskButton`
+## Step 2: Build a static version in React
+
+## Step 3: Find the minimal but complete representation of UI state
+
+## Step 4: Identify where your state should live
+
+## Step 5: Add inverse data flow 
+
 ## Requirements
 - The app should have multiple users. Each user should only see their own tasks.
 - Users should not be able to modify any other user's tasks.
@@ -20,3 +40,6 @@ The true value of a hierarchical todo list is that it allows users to hide the s
 - Allow the todo items to be infinitely nested and ensure that they render nicely to the screen. (Nice here is relative - pretty much any representation that is 10 layers deep will look awful. Just make sure that all the text is visible, and the columns are of a reasonable width)
 - Allow each user to move tasks/subtasks around arbitrarily.
 - Test your code! Unit tests are the best.
+
+## Useful Resources
+1. https://react.dev/learn/thinking-in-react
