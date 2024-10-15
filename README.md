@@ -1,4 +1,5 @@
 # Hierarchical Task Management App
+> Great code is the result of clear thinking.
 ## Step 1: Break the UI into a component hierarchy
 
 ![User Flow - Kanban Board (4)](https://github.com/user-attachments/assets/a9491a31-abc1-4ef7-9fe7-a8d3385b2c6a)
