@@ -42,5 +42,8 @@
 - Allow each user to move tasks/subtasks around arbitrarily.
 - Test your code! Unit tests are the best.
 
+## Personal Notes
+- React component functions accept a single argument, a `props` object
+
 ## Useful Resources
 1. https://react.dev/learn/thinking-in-react
