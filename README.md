@@ -44,6 +44,7 @@
 
 ## Personal Notes
 - React component functions accept a single argument, a `props` object
+- Do not use indexes, `Math.random()` to generate keys.
 
 ## Useful Resources
 1. https://react.dev/learn/thinking-in-react
