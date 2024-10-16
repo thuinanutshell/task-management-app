@@ -1,24 +1,11 @@
 # Hierarchical Task Management App
+> Great code is the result of clear thinking.
 ## Step 1: Break the UI into a component hierarchy
+In the component structure below, components on the same level of the tree have the same color.
+![User Flow - Kanban Board (10)](https://github.com/user-attachments/assets/9131c812-500e-4769-9f67-a2fc44579f4b)
 
-![User Flow - Kanban Board (4)](https://github.com/user-attachments/assets/a9491a31-abc1-4ef7-9fe7-a8d3385b2c6a)
+![User Flow - Kanban Board (11)](https://github.com/user-attachments/assets/d5be077f-786a-49a1-b9a5-e2dfaf79bb7e)
 
-
-
-- `TaskManagementApp`
-    - `Header`
-      - `CreateListButton`
-    - `BoardView`
-      - `TaskColumn`
-        - `ListHeader`
-          - `ListHeaderInput`
-        - `TaskList`
-          - `TaskNode` (recursive component)
-            - `TaskCard`
-                - `TaskNameInput`
-                - `AddSubtaskButton`
-            - `SubtaskList` (contains the child TaskNode)
-        - `AddNewTaskButton`
 ## Step 2: Build a static version in React
 
 ## Step 3: Find the minimal but complete representation of UI state
@@ -40,6 +27,10 @@
 - Allow the todo items to be infinitely nested and ensure that they render nicely to the screen. (Nice here is relative - pretty much any representation that is 10 layers deep will look awful. Just make sure that all the text is visible, and the columns are of a reasonable width)
 - Allow each user to move tasks/subtasks around arbitrarily.
 - Test your code! Unit tests are the best.
+
+## Personal Notes
+- React component functions accept a single argument, a `props` object
+- Do not use indexes, `Math.random()` to generate keys.
 
 ## Useful Resources
 1. https://react.dev/learn/thinking-in-react
