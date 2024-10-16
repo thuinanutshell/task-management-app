@@ -1,145 +1,248 @@
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Checkbox from 'react-bootstrap/Checkbox';
 import Container from 'react-bootstrap/Container';
-import Input from 'react-bootstrap/Input';
 import './index.css';
 
-function AddNewTaskButton() { // <-- this is the state
-  // The one that goes into the parenthesis is the props
-  // When this button is clicked, it should add a new task card to the list
-  // The UI of task card is defined in the function below
+function AddSubtaskButton({ onAddSubTask }) {
+  const [isAdding, setIsAdding] = useState(false);
+  const [subtaskName, setSubtaskName] = useState('');
+
+  const handleAddSubtask = () => {
+    if (subtaskName.trim()) {
+      onAddSubTask(subtaskName);
+      setIsAdding(false);
+      setSubtaskName('');
+    }
+  };
+
   return (
-    <Button variant='primary'>+ Add New Task</Button>
+    <div>
+      {isAdding ? (
+        <div>
+          <input 
+            type="text"
+            value={subtaskName}
+            onChange={(e) => setSubtaskName(e.target.value)}
+            placeholder="Enter Subtask Name"
+          />
+          <Button onClick={handleAddSubtask}>Add</Button>
+        </div>
+      ) : (
+        <Button onClick={() => setIsAdding(true)}>+ Add Subtask</Button>
+      )}
+    </div>
+  );
+};
+
+function DeleteTaskButton({ onRemoveTask }) { // <-- this is the state
+  // When this button is clicked, it should delete the task
+  return (
+    <Button 
+      variant='danger'
+      onClick={onRemoveTask}
+    >x</Button>
   );
 }
 
-function AddSubtaskButton() { // <-- this is the state
-  return (
-    <Button variant='primary'>+</Button>
-  );
-}
-
-function DeleteTaskButton() { // <-- this is the state
-  return (
-    <Button variant='danger'>x</Button>
-  );
-}
-
-function TaskNameInput({ onTaskNameChange }) { // <-- this is the state
+function TaskNameInput({ task }) { // <-- this is the state
   // When user write a task name and press Enter, the task name is updated to the new value
   return (
-    <Input 
+    <input
       type="text"
-      placeholder='Enter Task Name'
-      onChange={(e) => onTaskNameChange(e.target.value)} // <-- event handler
+      value={task.name}
+      onChange={() => {}}
     />
   );
 }
 
-function TaskCard() { // <-- this isn't a state, it needs to use the state
-  // This is a task card that contains a checkbox, a task name input, and two buttons
-  // The checkbox is used to mark the task as completed
-  // The task name input is used to edit the task name
-  // The first button is used to add a new task card
-  // The second button is used to delete the current task card
-  const [taskName, setTaskName] = useState('');
+function TaskCard({ task, taskIndex, itemIndex, setTasks }) {
+  const deleteTask = () => {
+    setTasks((prevTasks) => {
+      const newTasks = [...prevTasks];
+      newTasks[taskIndex].items.splice(itemIndex, 1);
+      return newTasks;
+    });
+  };
+
+  const addSubTask = (subtaskName) => {
+    setTasks((prevTasks) => {
+      const newTasks = [...prevTasks];
+      newTasks[taskIndex].items[itemIndex].subtasks.push(subtaskName);
+      return newTasks;
+    });
+  };
+
+  return (
+    <li className="task-card">
+      <TaskNameInput task={task} />
+      <AddSubtaskButton onAddSubTask={addSubTask} />
+      <DeleteTaskButton onDeleteTask={deleteTask} />
+    </li>
+  );
+};
+ 
+function TaskList({ tasks, taskIndex, setTasks }) {
+  return (
+    <ul>
+      {tasks.map((task, index) => (
+        <TaskCard
+          key={index}
+          task={task}
+          taskIndex={taskIndex}
+          itemIndex={index}
+          setTasks={setTasks}
+        />
+      ))}
+    </ul>
+  );
+}
+
+function ListHeaderInput({ task }) { // <-- this is the state
+  // When user write a list name and press Enter, the list name is updated to the new value
+  return (
+    <input
+      type="text"
+      value={task.name}
+      onChange={() => {}}
+      // <-- event handler
+    />
+  );
+}
+
+function ListHeader({ task }) { // <-- this isn't a state
   return (
     <Container>
-      <Checkbox></Checkbox>
-      <TaskNameInput />
-      <AddSubtaskButton /> {/* When this button is clicked on the task card, a new task will be nested under the card */}
-      <DeleteTaskButton />
+      <h2>{task.name}</h2>
+      <ListHeaderInput task={task} />
+    </Container>
+  );
+}
+
+function NestedTaskList({ tasks, taskIndex, setTasks }) {
+  return (
+    <Container className="nested-task-list">
+      <TaskList tasks={tasks} taskIndex={taskIndex} setTasks={setTasks} />
+    </Container>
+  );
+}
+
+function AddNewTaskButton({ onAddTask }) {
+  const [isAdding, setIsAdding] = useState(false);
+  const [taskName, setTaskName] = useState('');
+
+  const handleAddTask = () => {
+    if (taskName.trim()) {
+      onAddTask(taskName);
+      setIsAdding(false);
+      setTaskName('');
+    }
+  };
+
+  return (
+    <Container>
+      {isAdding ? (
+        <div>
+          <input 
+            type="text"
+            value={taskName}
+            onChange={(e) => setTaskName(e.target.value)}
+            placeholder="Enter Task Name"
+          />
+          <Button onClick={handleAddTask}>Add</Button>
+        </div>
+      ) : (
+        <Button onClick={() => setIsAdding(true)}>+ Add Task</Button>
+      )}
     </Container>
   )
 }
 
-function TaskNode() { // recursive component <-- this isn't a state
+function TaskColumn({ task, taskIndex, setTasks }) { // <-- this isn't a state
+  const addNewTask = (taskName) => {
+    setTasks((prevTasks) => {
+      const newTasks = [...prevTasks];
+      if (!newTasks[taskIndex].items) {
+        newTasks[taskIndex].items = [];
+      }
+      newTasks[taskIndex].items.push({ name: taskName, subtasks: [] });
+      return newTasks;
+    });
+  };
+
+  if (!task) {
+    return null; // or return a placeholder component
+  }
+
   return (
-    <TaskCard />
+    <div className="task-column">
+      <ListHeader task={task} />
+      <NestedTaskList tasks={task.items || []} taskIndex={taskIndex} setTasks={setTasks} />
+      <AddNewTaskButton onAddTask={addNewTask} />
+    </div>
   );
-}
- 
-function TaskList() { // <-- this isn't a state
-  // This is a list of task cards, which will be updated dynamically
-  const [tasks, setTasks] = useState([]);
+};
+
+function BoardView({ tasks, setTasks }) { // <-- this isn't a state
   return (
-    <Container>
-      <TaskNode/>
+    <Container className="board-view">
+      {tasks.map((task, index) => (
+        task && <TaskColumn key={index} task={task} taskIndex={index} setTasks={setTasks} />
+      ))}
     </Container>
   );
-}
+};
 
-function ListHeaderInput({ onListHeaderInputChange }) { // <-- this is the state
-  // When user write a list name and press Enter, the list name is updated to the new value
-  return (
-    <Input
-      type="text"
-      placeholder='Enter List Name'
-      onChange={(e) => onListHeaderInputChange(e.target.value)} // <-- event handler
-    />
-  );
-}
+function CreateListButton({ onCreateList }) { // <-- this is the state
+  const [isCreating, setIsCreating] = useState(false);
+  const [newListName, setNewListName] = useState('');
 
-function ListHeader() { // <-- this isn't a state
-  // This is a list header that contains a list name input and a delete button
-  const [listName, setListName] = useState('');
+  const handleCreateList = () => {
+    if (newListName.trim()) {
+      onCreateList(newListName);
+      setIsCreating(false);
+      setNewListName('');
+    }
+  };
+
   return (
     <Container>
-      <ListHeaderInput />
-      <Button>Delete</Button>
+      {isCreating ? (
+        <div>
+          <input 
+            type="text"
+            value={newListName}
+            onChange={(e) => setNewListName(e.target.value)}
+            placeholder="Enter List Name"
+          />
+          <Button onClick={handleCreateList}>Create</Button>
+        </div>
+      ) : (
+        <Button onClick={() => setIsCreating(true)}>Create New List</Button>
+      )}
     </Container>
   );
-}
+};
 
-function TaskColumn() { // <-- this isn't a state
-  const [taskLists, setTaskLists] = useState([]);
-  return (
-    <Container>
-      <ListHeader />
-      <TaskList />
-      <AddNewTaskButton />
-    </Container>
-  );
-}
-
-function BoardView() { // <-- this isn't a state
-  const [taskColumns, setTaskColumns] = useState([]);
-  return (
-    <Container>
-      <TaskColumn />
-    </Container>
-  );
-}
-
-function CreateListButton() { // <-- this is the state
-  return (
-    <Button variant='primary'>+ Create List</Button>
-  );
-}
-
-function Header() { // <-- this is a state
+function Header({ onCreateList }) { // <-- this is a state
   return (
     <Container>
       <h1>Task Manager</h1>
-      <CreateListButton />
+      <CreateListButton onCreateList={onCreateList}/>
     </Container>
   );
 }
 
-const TASKS = [
-  {"task name": "task 1"},
-  {"task name": "task 2"},
-  {"task name": "task 3"},
-  {"task name": "task 4"},
-  {"task name": "task 5"},
-];
+function App() {
+  const [tasks, setTasks] = useState([]);
 
-function App() { // This isn't a state
+  const addNewList = (listName) => {
+    setTasks([...tasks, { name: listName, items: [] }]);
+  };
+
   return (
     <>
-      <Header />
-      <BoardView tasks={TASKS}/>
+      <Header onCreateList={addNewList} />
+      <BoardView tasks={tasks} setTasks={setTasks}/>
     </>
   );
 }
