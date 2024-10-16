@@ -2,24 +2,13 @@
 > Great code is the result of clear thinking.
 ## Step 1: Break the UI into a component hierarchy
 
-![User Flow - Kanban Board (4)](https://github.com/user-attachments/assets/a9491a31-abc1-4ef7-9fe7-a8d3385b2c6a)
+![User Flow - Kanban Board (7)](https://github.com/user-attachments/assets/c8b1c58b-0103-48e4-9e54-d517a819d6f9)
+
+
+![User Flow - Kanban Board (8)](https://github.com/user-attachments/assets/a4956c11-8400-4492-a86f-b5f5a4079a2f)
 
 
 
-- `TaskManagementApp`
-    - `Header`
-      - `CreateListButton`
-    - `BoardView`
-      - `TaskColumn`
-        - `ListHeader`
-          - `ListHeaderInput`
-        - `TaskList`
-          - `TaskNode` (recursive component)
-            - `TaskCard`
-                - `TaskNameInput`
-                - `AddSubtaskButton`
-            - `SubtaskList` (contains the child TaskNode)
-        - `AddNewTaskButton`
 ## Step 2: Build a static version in React
 
 ## Step 3: Find the minimal but complete representation of UI state
