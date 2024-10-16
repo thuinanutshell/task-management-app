@@ -1,7 +1,7 @@
 # Hierarchical Task Management App
 > Great code is the result of clear thinking.
 ## Step 1: Break the UI into a component hierarchy
-
+In the component structure below, components on the same level of the tree have the same color.
 ![User Flow - Kanban Board (7)](https://github.com/user-attachments/assets/c8b1c58b-0103-48e4-9e54-d517a819d6f9)
 
 
