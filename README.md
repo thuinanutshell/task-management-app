@@ -2,12 +2,9 @@
 > Great code is the result of clear thinking.
 ## Step 1: Break the UI into a component hierarchy
 In the component structure below, components on the same level of the tree have the same color.
-![User Flow - Kanban Board (7)](https://github.com/user-attachments/assets/c8b1c58b-0103-48e4-9e54-d517a819d6f9)
+![User Flow - Kanban Board (10)](https://github.com/user-attachments/assets/9131c812-500e-4769-9f67-a2fc44579f4b)
 
-
-![User Flow - Kanban Board (8)](https://github.com/user-attachments/assets/a4956c11-8400-4492-a86f-b5f5a4079a2f)
-
-
+![User Flow - Kanban Board (11)](https://github.com/user-attachments/assets/d5be077f-786a-49a1-b9a5-e2dfaf79bb7e)
 
 ## Step 2: Build a static version in React
 
