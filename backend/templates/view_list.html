@@ -1,0 +1,28 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <h1 class="title">{{ list.list_name }}</h1>
+
+  <div class="buttons">
+    <a
+      href="{{ url_for('lists.edit_list', list_id=list.id) }}"
+      class="button is-info"
+      >Edit</a
+    >
+    <a href="{{ url_for('lists.dashboard') }}" class="button is-light"
+      >Back to Dashboard</a
+    >
+  </div>
+
+  <div class="box">
+    {% if list.items.all() %}
+    <ul>
+      {% for item in list.items %}
+      <li>{{ item.item_name }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>No items in this list yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

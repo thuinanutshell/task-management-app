@@ -1,0 +1,94 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <h1 class="title">My Lists</h1>
+
+  <!-- Add New List Form -->
+  <div class="box">
+    <form method="POST" action="{{ url_for('lists.create_list') }}">
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input
+            class="input"
+            type="text"
+            name="list_name"
+            placeholder="Enter new list name"
+          />
+        </div>
+        <div class="control">
+          <button class="button is-primary">Add List</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Existing Lists -->
+  <div class="columns is-multiline">
+    {% for list in lists %}
+    <div class="column is-one-third">
+      <div class="card">
+        <header class="card-header">
+          <p class="card-header-title">{{ list.list_name }}</p>
+        </header>
+        <div class="card-content">
+          <div class="content">
+            <!-- Items Checklist -->
+            <div class="items-list" style="max-height: 200px; overflow-y: auto">
+              {% if list.items.all() %} {% for item in list.items %}
+              <form action="{{ url_for('items.toggle_item') }}" method="POST">
+                <input type="hidden" name="item_id" value="{{ item.id }}" />
+                <div class="field">
+                  <label class="checkbox">
+                    <input
+                      type="checkbox"
+                      {%
+                      if
+                      item.is_completed
+                      %}checked{%
+                      endif
+                      %}
+                      onchange="this.form.submit()"
+                    />
+                    <span
+                      class="ml-2 {% if item.is_completed %}has-text-grey-light is-line-through{% endif %}"
+                      >{{ item.item_name }}</span
+                    >
+                  </label>
+                </div>
+              </form>
+              {% endfor %} {% else %}
+              <p class="has-text-grey-light">No items yet</p>
+              {% endif %}
+            </div>
+
+            <!-- Add Item Button -->
+            <button
+              class="button is-primary is-fullwidth mt-3"
+              onclick="window.location.href='{{ url_for('items.add_item', list_id=list.id) }}'"
+            >
+              Add Item
+            </button>
+          </div>
+        </div>
+        <footer class="card-footer">
+          <a
+            href="{{ url_for('lists.view_list', list_id=list.id) }}"
+            class="card-footer-item"
+            >View</a
+          >
+          <a
+            href="{{ url_for('lists.edit_list', list_id=list.id) }}"
+            class="card-footer-item"
+            >Edit</a
+          >
+          <a
+            href="{{ url_for('lists.delete_list', list_id=list.id) }}"
+            class="card-footer-item has-text-danger"
+            >Delete</a
+          >
+        </footer>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

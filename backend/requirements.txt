@@ -1,3 +1,6 @@
-SQLAlchemy=2.0.36
-Flask-SQLAlchemy=3.1.1
-flask_smorest=0.45.0
+Flask==2.2.5
+Flask-Login==0.6.2
+Flask-SQLAlchemy==3.0.3
+python-dotenv==1.0.0
+SQLAlchemy==2.0.36
+Werkzeug==2.2.3
