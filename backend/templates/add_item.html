@@ -1,0 +1,35 @@
+{% extends "base.html" %} {% block content %}
+<div class="container">
+  <h1 class="title">Add Item to {{ list.list_name }}</h1>
+
+  <div class="box">
+    <form method="POST">
+      <div class="field">
+        <label class="label">Item Name</label>
+        <div class="control">
+          <input
+            class="input"
+            type="text"
+            name="item_name"
+            placeholder="Enter item name"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-primary">Add Item</button>
+        </div>
+        <div class="control">
+          <a
+            href="{{ url_for('lists.view_list', list_id=list.id) }}"
+            class="button is-light"
+            >Cancel</a
+          >
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
