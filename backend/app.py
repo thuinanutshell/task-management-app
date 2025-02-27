@@ -2,11 +2,11 @@ from flask import Flask, Blueprint, redirect, url_for
 import os
 from dotenv import load_dotenv
 from flask_login import LoginManager
-from .models import db, User
-from .lists import list_bp
-from .items import item_bp
-from .auth import auth_bp
-from .main import main_bp
+from backend.models import db, User
+from backend.lists import list_bp
+from backend.items import item_bp
+from backend.auth import auth_bp
+from backend.main import main_bp
 
 # Load environment variables
 load_dotenv()
