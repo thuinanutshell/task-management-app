@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block title %}Home - Task Manager{% endblock %} {%
+block content %}
+<div class="text-center">
+  <h1 class="display-4">Welcome to Task Manager</h1>
+  <p class="lead">Organize your tasks efficiently</p>
+
+  {% if not current_user.is_authenticated %}
+  <div class="mt-4">
+    <a href="{{ url_for('auth_bp.login_page') }}" class="btn btn-primary me-2"
+      >Login</a
+    >
+    <a
+      href="{{ url_for('auth_bp.signup_page') }}"
+      class="btn btn-secondary me-2"
+      >Sign Up</a
+    >
+    <a
+      href="{{ url_for('auth_bp.guest_login') }}"
+      class="btn btn-outline-primary"
+      >Try as Guest</a
+    >
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

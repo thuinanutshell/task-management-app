@@ -1,34 +1,57 @@
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask
 from flask_login import UserMixin
+from sqlalchemy import Column, Integer, ForeignKey
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase, relationship
+from datetime import datetime
 
-db = SQLAlchemy()
+class Base(DeclarativeBase):
+    pass
+
+db = SQLAlchemy(model_class=Base)
 
 class User(UserMixin, db.Model):
-    __tablename__ = "users"
+    __tablename__ = 'users'
     
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password_hashed = db.Column(db.String(80))
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    email = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+    guest = db.Column(db.Boolean, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     
-    lists = db.relationship("Lists", back_populates="user", lazy="dynamic")
+    # one-to-many relationship with list
+    # backref indicates the bidirectional relationship between two tables
+    # cascade automatically delete child records if the parent's record is deleted
+    lists = relationship('List', backref='owner', cascade='all, delete-orphan')
     
-class Lists(db.Model):
-    __tablename__ = "lists"
-    
-    id = db.Column(db.Integer, primary_key=True)
-    list_name = db.Column(db.String(80), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    
-    user = db.relationship("User", back_populates="lists")
-    items = db.relationship("Items", back_populates="lst", lazy="dynamic")
+    def __repr__(self):
+        return f"User(username={self.username}, email={self.email})"
 
-class Items(db.Model):
-    __tablename__ = "items"
+class List(db.Model):
+    __tablename__ = 'lists'
     
-    id = db.Column(db.Integer, primary_key=True)
-    item_name = db.Column(db.String, nullable=False)
-    list_id = db.Column(db.Integer, db.ForeignKey("lists.id"), nullable=False)
-    is_completed = db.Column(db.Boolean, default=False)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
     
-    lst = db.relationship("Lists", back_populates="items")
+    # One-to-many relationship with user's table
+    user_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
+    items = relationship('Item', backref='list', cascade='all, delete-orphan')
+    
+    def __repr__(self):
+        return f"List(name={self.name}, user_id={self.user_id})"
+    
+class Item(db.Model):
+    __tablename__ = 'items'
+    
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=datetime.utcnow)
+    
+    # one-to-many relationship with the list table
+    list_id = db.Column(db.Integer, ForeignKey('lists.id'), nullable=False)
+    
+    def __repr__(self):
+        return f"Item(name={self.name}, list_id={self.list_id})"
+

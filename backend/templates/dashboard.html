@@ -1,94 +1,224 @@
-{% extends "base.html" %} {% block content %}
-<div class="container">
-  <h1 class="title">My Lists</h1>
-
-  <!-- Add New List Form -->
-  <div class="box">
-    <form method="POST" action="{{ url_for('lists.create_list') }}">
-      <div class="field has-addons">
-        <div class="control is-expanded">
-          <input
-            class="input"
-            type="text"
-            name="list_name"
-            placeholder="Enter new list name"
-          />
-        </div>
-        <div class="control">
-          <button class="button is-primary">Add List</button>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <!-- Existing Lists -->
-  <div class="columns is-multiline">
-    {% for list in lists %}
-    <div class="column is-one-third">
-      <div class="card">
-        <header class="card-header">
-          <p class="card-header-title">{{ list.list_name }}</p>
-        </header>
-        <div class="card-content">
-          <div class="content">
-            <!-- Items Checklist -->
-            <div class="items-list" style="max-height: 200px; overflow-y: auto">
-              {% if list.items.all() %} {% for item in list.items %}
-              <form action="{{ url_for('items.toggle_item') }}" method="POST">
-                <input type="hidden" name="item_id" value="{{ item.id }}" />
-                <div class="field">
-                  <label class="checkbox">
-                    <input
-                      type="checkbox"
-                      {%
-                      if
-                      item.is_completed
-                      %}checked{%
-                      endif
-                      %}
-                      onchange="this.form.submit()"
-                    />
-                    <span
-                      class="ml-2 {% if item.is_completed %}has-text-grey-light is-line-through{% endif %}"
-                      >{{ item.item_name }}</span
-                    >
-                  </label>
-                </div>
-              </form>
-              {% endfor %} {% else %}
-              <p class="has-text-grey-light">No items yet</p>
-              {% endif %}
-            </div>
-
-            <!-- Add Item Button -->
-            <button
-              class="button is-primary is-fullwidth mt-3"
-              onclick="window.location.href='{{ url_for('items.add_item', list_id=list.id) }}'"
-            >
-              Add Item
-            </button>
+{% extends "base.html" %} {% block title %}Dashboard - Task Manager{% endblock
+%} {% block content %}
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-body">
+        <h3 class="card-title">Create New List</h3>
+        <!-- Fix: Add method="POST" to the form -->
+        <form
+          id="create-list-form"
+          onsubmit="return createList(event)"
+          method="POST"
+        >
+          <div class="form-group">
+            <input
+              type="text"
+              name="name"
+              class="form-control"
+              placeholder="List name"
+              required
+            />
           </div>
-        </div>
-        <footer class="card-footer">
-          <a
-            href="{{ url_for('lists.view_list', list_id=list.id) }}"
-            class="card-footer-item"
-            >View</a
-          >
-          <a
-            href="{{ url_for('lists.edit_list', list_id=list.id) }}"
-            class="card-footer-item"
-            >Edit</a
-          >
-          <a
-            href="{{ url_for('lists.delete_list', list_id=list.id) }}"
-            class="card-footer-item has-text-danger"
-            >Delete</a
-          >
-        </footer>
+          <button type="submit" class="btn btn-primary">Create List</button>
+        </form>
       </div>
     </div>
-    {% endfor %}
+
+    <div class="lists-container mt-4">
+      <h3>Your Lists</h3>
+      <div id="lists-area">
+        <!-- Lists will be loaded here dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-8">
+    <div id="items-area">
+      <!-- Items will be loaded here when a list is selected -->
+    </div>
   </div>
 </div>
+
+<script>
+  // Create new list
+  function createList(event) {
+    event.preventDefault(); // Important: prevent default form submission
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch("{{ url_for('list_bp.add_list') }}", {
+      method: "POST", // Ensure method is POST
+      body: formData,
+      headers: {
+        // Don't set Content-Type with FormData
+        Accept: "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        form.reset();
+        loadLists(); // Refresh the lists
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Failed to create list");
+      });
+
+    return false;
+  }
+
+  // Fetch and display lists
+  function loadLists() {
+    fetch("/get-lists")
+      .then((response) => response.json())
+      .then((data) => {
+        const listsArea = document.getElementById("lists-area");
+        listsArea.innerHTML = data.lists
+          .map(
+            (list) => `
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title">${list.name}</h5>
+                        <button onclick="loadItems(${list.id})" class="btn btn-sm btn-primary">View Items</button>
+                        <button onclick="deleteList(${list.id})" class="btn btn-sm btn-danger">Delete</button>
+                    </div>
+                </div>
+            `
+          )
+          .join("");
+      });
+  }
+
+  // Fetch and display items for a specific list
+  function loadItems(listId) {
+    fetch(`/lists/${listId}/items`)
+      .then((response) => response.json())
+      .then((data) => {
+        const itemsArea = document.getElementById("items-area");
+        itemsArea.innerHTML = `
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Items</h3>
+                        <form onsubmit="return addItem(event, ${listId})">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="name" placeholder="New Item" required>
+                                <button class="btn btn-primary" type="submit">Add</button>
+                            </div>
+                        </form>
+                        <div class="items-list">
+                            ${data.items
+                              .map(
+                                (item) => `
+                                <div class="card mb-2">
+                                    <div class="card-body d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <input type="checkbox" 
+                                                   class="form-check-input me-2" 
+                                                   onchange="toggleStrike(this)">
+                                            <span class="item-text">${item.name}</span>
+                                        </div>
+                                        <button onclick="deleteItem(${listId}, ${item.id})" 
+                                                class="btn btn-sm btn-danger">Delete</button>
+                                    </div>
+                                </div>
+                            `
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                </div>
+            `;
+      });
+  }
+
+  // Add new item
+  function addItem(event, listId) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+
+    fetch(`/lists/${listId}/create-item`, {
+      method: "POST",
+      body: formData,
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        form.reset();
+        loadItems(listId); // Refresh the items list
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Failed to create item");
+      });
+
+    return false;
+  }
+
+  // Delete list
+  function deleteList(listId) {
+    if (!confirm("Are you sure you want to delete this list?")) return;
+
+    fetch(`/delete-list/${listId}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (response.ok) {
+          loadLists(); // Refresh the lists
+          document.getElementById("items-area").innerHTML = ""; // Clear items area
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+
+  // Add this new function to handle the strike-through
+  function toggleStrike(checkbox) {
+    const itemText = checkbox.nextElementSibling;
+    if (checkbox.checked) {
+      itemText.style.textDecoration = "line-through";
+      itemText.style.color = "#6c757d";
+    } else {
+      itemText.style.textDecoration = "none";
+      itemText.style.color = "";
+    }
+  }
+
+  // Add this function before the DOMContentLoaded event listener
+  function deleteItem(listId, itemId) {
+    if (!confirm("Are you sure you want to delete this item?")) return;
+
+    fetch(`/lists/${listId}/items/${itemId}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        loadItems(listId); // Refresh the items list after successful deletion
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Failed to delete item");
+      });
+  }
+
+  // Load lists when page loads
+  document.addEventListener("DOMContentLoaded", loadLists);
+</script>
 {% endblock %}
