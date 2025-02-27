@@ -2,11 +2,11 @@ from flask import Flask, Blueprint, redirect, url_for
 import os
 from dotenv import load_dotenv
 from flask_login import LoginManager
-from models import db, User
-from lists import list_bp
-from items import item_bp
-from auth import auth_bp
-from main import main_bp
+from .models import db, User
+from .lists import list_bp
+from .items import item_bp
+from .auth import auth_bp
+from .main import main_bp
 
 # Load environment variables
 load_dotenv()
@@ -42,4 +42,4 @@ app.register_blueprint(item_bp)
 app.register_blueprint(main_bp)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=False)

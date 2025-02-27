@@ -3,5 +3,10 @@ services:
     name: task-management-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: gunicorn backend.app:app
     repo: https://github.com/thuinanutshell/task-management-app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        sync: false
